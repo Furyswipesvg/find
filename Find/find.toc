@@ -1,0 +1,9 @@
+## Interface: 90002
+## Title: find
+## Author: Furyswipes of Youtube 
+## Version: 0.1
+## Notes: Find anything in anyone's bag!
+## OptionalDeps: AceComm-3.0, CallbackHandler-1.0
+
+embeds.xml
+find.lua
