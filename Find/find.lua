@@ -1,5 +1,10 @@
---This is the find routine originally from 5-Minute Multiboxing--a multiboxing system by Furyswipes of Youtube.
-findver=0.1
+--[[
+  This is the find routine originally from 5-Minute Multiboxing--an informal multiboxing system by Furyswipes of Youtube.
+  Additional code was provided by FSRockT--he figured out how to read tooltips.
+  ]] --
+local addon, _ns = ...
+local FSMBFIND
+findver=0.2
 print("Find version "..findver.." loaded.")
 FSMBFIND_msgcd=GetTime()
 AceComm=LibStub("AceComm-3.0")
@@ -14,12 +19,17 @@ SlashCmdList["FIND"]=function(item)
 		print("I have no idea what all the types are. Experiment and let me know on my discord.")
 		return 
 	end
-	AceComm.SendCommMessage(FSMBFIND,"FSMB_FIND", item ,"RAID")
+	if IsInGroup() then
+		AceComm.SendCommMessage(FSMBFIND,"FSMB_FIND", item ,"RAID")
+	end
+	FSMB_Find(item)
 end
 FSMBFIND = CreateFrame("frame","FSMBFIND",UIParent)
-function FSMBFIND:OnCommReceived(prefix,msg)
+function FSMBFIND:OnCommReceived(prefix,msg,group,sender)
 	if prefix=="FSMB_FIND" then
-		FSMB_Find(msg)
+		if sender~=myname then 
+			FSMB_Find(msg)
+		end
 	end
 end
 AceComm.RegisterComm(FSMBFIND,"FSMB_FIND")
@@ -247,6 +257,10 @@ function IsUnboundBOE(b,s)
 end
 function FSMBFIND_msg(msg)
 	--this is a raid message function with a 2 second cooldown to kind-of avoid some spamming.
+	if not IsInGroup() then 
+		print(msg)
+		return
+	end
 	local cooldown=5
 	local time=GetTime()
 	if MB_prev_msg==msg and FSMBFIND_msgcd+cooldown>time then return end
